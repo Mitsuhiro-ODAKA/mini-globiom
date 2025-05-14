@@ -1,0 +1,25 @@
+B 3 C o m p i l a t i o n
+B 122 Equation Listing    SOLVE SimpleFarmModel Using LP From line 85
+D 125 Eq_Objective
+D 130 Eq_ProductionDef
+D 137 Eq_LandConstraint
+B 143 Column Listing      SOLVE SimpleFarmModel Using LP From line 85
+E 146 X
+E 161 Production
+E 174 TotalProfit
+B 182 Range Statistics    SOLVE SimpleFarmModel Using LP From line 85
+B 193 Model Statistics    SOLVE SimpleFarmModel Using LP From line 85
+B 206 Solution Report     SOLVE SimpleFarmModel Using LP From line 85
+F 239 Eq_Objective
+F 243 Eq_ProductionDef
+F 250 Eq_LandConstraint
+G 256 X
+G 263 Production
+G 272 TotalProfit
+B 282 E x e c u t i o n
+I 282 X
+I 290 X
+I 297 Production
+I 305 TotalProfit
+I 306 report
+I 314 Eq_LandConstraint

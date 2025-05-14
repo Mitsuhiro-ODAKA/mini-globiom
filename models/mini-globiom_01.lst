@@ -1,0 +1,332 @@
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *-------------------------------------------------------------------------------
+   2  * Title: Simple Agricultural Sector Model (GLOBIOM-like basic structure)
+   3  * Author: Mitsuhiro Odaka
+   4  * Date: 2025-05-14
+   5  * Description: A simple model to maximize profit from crop production
+   6  * under a land constraint.
+   7  *-------------------------------------------------------------------------------
+   8   
+   9  *-------------------------------------------------------------------------------
+  10  * 1. Set Declarations
+  11  *-------------------------------------------------------------------------------
+  12  Sets
+  13      i   'Crops'         / rice  "Rice"
+  14                            wheat "Wheat" /
+  15   
+  16      j   'Regions'       / region1 "Single Region" /;
+  17   
+  18  *-------------------------------------------------------------------------------
+  19  * 2. Data Declarations and Definitions (Parameters)
+  20  *-------------------------------------------------------------------------------
+  21  Parameters
+  22      market_price(i)      'Market price of crop i (USD/ton)'
+  23                           / rice   400
+  24                             wheat  250 /
+  25   
+  26      yield_per_ha(i,j)    'Yield of crop i in region j (ton/ha)'
+  27                           / rice.region1   5
+  28                             wheat.region1  3 /
+  29   
+  30      cost_per_ha(i,j)     'Production cost of crop i in region j (USD/ha)'
+  31                           / rice.region1   800
+  32                             wheat.region1  400 /
+  33   
+  34      land_available(j)    'Available agricultural land in region j (ha)'
+  35                           / region1  100 /;
+  36   
+  37  * Scalars for demonstration (can be derived if needed)
+  38  Scalar  total_land_available 'Total available land across all regions (ha)';
+  39  total_land_available = sum(j, land_available(j));
+  40   
+  41   
+  42  *-------------------------------------------------------------------------------
+  43  * 3. Variable Declarations
+  44  *-------------------------------------------------------------------------------
+  45  Variables
+  46      X(i,j)               'Area cultivated for crop i in region j (ha)'
+  47      Production(i,j)      'Production of crop i in region j (ton)'
+  48      TotalProfit          'Total profit from all crops and regions (USD)';
+  49   
+  50  Positive Variables X, Production;
+  51   
+  52  *-------------------------------------------------------------------------------
+  53  * 4. Equation Declarations
+  54  *-------------------------------------------------------------------------------
+  55  Equations
+  56      Eq_Objective         'Objective function: maximize total profit'
+  57      Eq_ProductionDef(i,j)'Production definition for crop i in region j'
+  58      Eq_LandConstraint(j) 'Land use constraint for region j';
+  59   
+  60  *-------------------------------------------------------------------------------
+  61  * 5. Equation Definitions
+  62  *-------------------------------------------------------------------------------
+  63   
+  64  * Objective Function: Maximize total profit
+  65  Eq_Objective..
+  66      TotalProfit =E= sum((i,j), market_price(i) * Production(i,j) - cost_per_ha(i,j) * X(i,j) );
+  67   
+  68  * Production Definition: Production = Area * Yield
+  69  Eq_ProductionDef(i,j)..
+  70      Production(i,j) =E= X(i,j) * yield_per_ha(i,j);
+  71   
+  72  * Land Constraint: Total cultivated area must be less than or equal to available land
+  73  Eq_LandConstraint(j)..
+  74      sum(i, X(i,j)) =L= land_available(j);
+  75   
+  76  *-------------------------------------------------------------------------------
+  77  * 6. Model Definition and Solve Statement
+  78  *-------------------------------------------------------------------------------
+  79  Model SimpleFarmModel /
+  80      Eq_Objective
+  81      Eq_ProductionDef
+  82      Eq_LandConstraint
+  83  /;
+  84   
+  85  Solve SimpleFarmModel using LP maximizing TotalProfit;
+  86   
+  87  *-------------------------------------------------------------------------------
+  88  * 7. Displaying Results
+  89  *-------------------------------------------------------------------------------
+  90  Display X.l, X.m,
+  91          Production.l,
+  92          TotalProfit.l;
+  93   
+  94  * Optional: More detailed reporting
+  95  Parameter report(i,j,*) 'Detailed report';
+  96  report(i,j,'Area_ha') = X.l(i,j);
+  97  report(i,j,'Yield_ton_ha') = yield_per_ha(i,j);
+  98  report(i,j,'Production_ton') = Production.l(i,j);
+  99  report(i,j,'Price_usd_ton') = market_price(i);
+ 100  report(i,j,'Cost_usd_ha') = cost_per_ha(i,j);
+ 101  report(i,j,'Revenue_usd') = market_price(i) * Production.l(i,j);
+ 102  report(i,j,'TotalCost_usd') = cost_per_ha(i,j) * X.l(i,j);
+ 103  report(i,j,'Profit_usd') = market_price(i) * Production.l(i,j) - cost_per_ha(i,j) * X.l(i,j);
+ 104   
+ 105  Display report;
+ 106   
+ 107  * Check the marginal value of the land constraint
+ 108  Display Eq_LandConstraint.m;
+ 109  * This tells how much the total profit would increase if one more unit of land became available.
+ 110   
+ 111  * End of GAMS code
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  49.5.0 b32bf9f5 WEX-WEI
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE SimpleFarmModel Using LP From line 85
+
+
+---- Eq_Objective  =E=  Objective function: maximize total profit
+
+Eq_Objective..  800*X(rice,region1) + 400*X(wheat,region1) - 400*Production(rice,region1) - 250*Production(wheat,region1) + TotalProfit =E= 0 ; (LHS = 0)
+     
+
+---- Eq_ProductionDef  =E=  Production definition for crop i in region j
+
+Eq_ProductionDef(rice,region1)..  - 5*X(rice,region1) + Production(rice,region1) =E= 0 ; (LHS = 0)
+     
+Eq_ProductionDef(wheat,region1)..  - 3*X(wheat,region1) + Production(wheat,region1) =E= 0 ; (LHS = 0)
+     
+
+---- Eq_LandConstraint  =L=  Land use constraint for region j
+
+Eq_LandConstraint(region1)..  X(rice,region1) + X(wheat,region1) =L= 100 ; (LHS = 0)
+     
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE SimpleFarmModel Using LP From line 85
+
+
+---- X  Area cultivated for crop i in region j (ha)
+
+X(rice,region1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      800       Eq_Objective
+       -5       Eq_ProductionDef(rice,region1)
+        1       Eq_LandConstraint(region1)
+
+X(wheat,region1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      400       Eq_Objective
+       -3       Eq_ProductionDef(wheat,region1)
+        1       Eq_LandConstraint(region1)
+
+
+---- Production  Production of crop i in region j (ton)
+
+Production(rice,region1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -400       Eq_Objective
+        1       Eq_ProductionDef(rice,region1)
+
+Production(wheat,region1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -250       Eq_Objective
+        1       Eq_ProductionDef(wheat,region1)
+
+
+---- TotalProfit  Total profit from all crops and regions (USD)
+
+TotalProfit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       Eq_Objective
+
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE SimpleFarmModel Using LP From line 85
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+02, 1.000E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 8.000E+02]
+
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE SimpleFarmModel Using LP From line 85
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES            5
+NON ZERO ELEMENTS            11
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE SimpleFarmModel Using LP From line 85
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   SimpleFarmModel     OBJECTIVE  TotalProfit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  85
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE           120000.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Optimal solution found
+Objective:       120000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU Eq_Object~          .              .              .             1.0000      
+
+  Eq_Objective  Objective function: maximize total profit
+
+---- EQU Eq_ProductionDef  Production definition for crop i in region j
+
+                     LOWER          LEVEL          UPPER         MARGINAL
+
+rice .region1          .              .              .           400.0000      
+wheat.region1          .              .              .           250.0000      
+
+---- EQU Eq_LandConstraint  Land use constraint for region j
+
+               LOWER          LEVEL          UPPER         MARGINAL
+
+region1        -INF          100.0000       100.0000      1200.0000      
+
+---- VAR X  Area cultivated for crop i in region j (ha)
+
+                     LOWER          LEVEL          UPPER         MARGINAL
+
+rice .region1          .           100.0000        +INF             .          
+wheat.region1          .              .            +INF         -850.0000      
+
+---- VAR Production  Production of crop i in region j (ton)
+
+                     LOWER          LEVEL          UPPER         MARGINAL
+
+rice .region1          .           500.0000        +INF             .          
+wheat.region1          .              .            +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR TotalProf~        -INF       120000.0000        +INF             .          
+
+  TotalProfit  Total profit from all crops and regions (USD)
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:49 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     90 VARIABLE X.L  Area cultivated for crop i in region j (ha)
+
+          region1
+
+rice      100.000
+
+
+----     90 VARIABLE X.M  Area cultivated for crop i in region j (ha)
+
+          region1
+
+wheat    -850.000
+
+
+----     90 VARIABLE Production.L  Production of crop i in region j (ton)
+
+          region1
+
+rice      500.000
+
+
+----     90 VARIABLE TotalProfit.L         =   120000.000  Total profit from all crops and regions (USD)
+
+----    105 PARAMETER report  Detailed report
+
+                  Area_ha  Yield_ton~  Productio~  Price_usd~  Cost_usd_~  Revenue_u~  TotalCost~  Profit_usd
+
+rice .region1     100.000       5.000     500.000     400.000     800.000  200000.000   80000.000  120000.000
+wheat.region1                   3.000                 250.000     400.000
+
+
+----    108 EQUATION Eq_LandConstraint.M  Land use constraint for region j
+
+region1 1200.000
+
+
+
+EXECUTION TIME       =        0.047 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_01.gms
+Output     C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_01.lst

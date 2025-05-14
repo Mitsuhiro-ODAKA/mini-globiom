@@ -1,0 +1,240 @@
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  SETS
+   2    l  Land types /arable, forest/
+   3    c  Crops      /wheat, maize/;
+   4   
+   5  PARAMETERS
+   6    land_avail(l)
+   7    price(c)
+   8    yield(c)
+   9    co2_emission(l,c)
+  10    cost(c);
+  11   
+  12  land_avail("arable") = 100;
+  13  land_avail("forest") = 50;
+  14   
+  15  price("wheat") = 300;
+  16  price("maize") = 250;
+  17   
+  18  yield("wheat") = 2.5;
+  19  yield("maize") = 3.0;
+  20   
+  21  cost("wheat") = 100;
+  22  cost("maize") = 90;
+  23   
+  24  co2_emission("arable","wheat") = 0.5;
+  25  co2_emission("arable","maize") = 0.6;
+  26  co2_emission("forest","wheat") = 2.0;
+  27  co2_emission("forest","maize") = 2.2;
+  28   
+  29  VARIABLES
+  30    land_use(l,c)
+  31    profit
+  32    total_emission;
+  33   
+  34  POSITIVE VARIABLES land_use;
+  35   
+  36  EQUATIONS
+  37    profit_def
+  38    land_constraint(l)
+  39    emission_def;
+  40   
+  41  profit_def..
+  42    profit =E= SUM((l,c), (price(c)*yield(c) - cost(c)) * land_use(l,c));
+  43   
+  44  land_constraint(l)..
+  45    SUM(c, land_use(l,c)) =L= land_avail(l);
+  46   
+  47  emission_def..
+  48    total_emission =E= SUM((l,c), co2_emission(l,c)*land_use(l,c));
+  49   
+  50  MODEL maximize_profit /all/;
+  51  SOLVE maximize_profit USING LP MAXIMIZING profit;
+  52   
+  53  DISPLAY land_use.l, profit.l, total_emission.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  49.5.0 b32bf9f5 WEX-WEI
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE maximize_profit Using LP From line 51
+
+
+---- profit_def  =E=  
+
+profit_def..  - 650*land_use(arable,wheat) - 660*land_use(arable,maize) - 650*land_use(forest,wheat) - 660*land_use(forest,maize) + profit =E= 0 ; (LHS = 0)
+     
+
+---- land_constraint  =L=  
+
+land_constraint(arable)..  land_use(arable,wheat) + land_use(arable,maize) =L= 100 ; (LHS = 0)
+     
+land_constraint(forest)..  land_use(forest,wheat) + land_use(forest,maize) =L= 50 ; (LHS = 0)
+     
+
+---- emission_def  =E=  
+
+emission_def..  - 0.5*land_use(arable,wheat) - 0.6*land_use(arable,maize) - 2*land_use(forest,wheat) - 2.2*land_use(forest,maize) + total_emission =E= 0 ; (LHS = 0)
+     
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE maximize_profit Using LP From line 51
+
+
+---- land_use  
+
+land_use(arable,wheat)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -650       profit_def
+        1       land_constraint(arable)
+       -0.5     emission_def
+
+land_use(arable,maize)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -660       profit_def
+        1       land_constraint(arable)
+       -0.6     emission_def
+
+land_use(forest,wheat)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+     -650       profit_def
+        1       land_constraint(forest)
+       -2       emission_def
+
+REMAINING ENTRY SKIPPED
+
+---- profit  
+
+profit
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       profit_def
+
+
+---- total_emission  
+
+total_emission
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       emission_def
+
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE maximize_profit Using LP From line 51
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 5.000E+01, 1.000E+02] - Zero values observed as well
+Bound     [min, max] : [        NA,        NA] - Zero values observed as well
+Matrix    [min, max] : [ 5.000E-01, 6.600E+02]
+
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE maximize_profit Using LP From line 51
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            4
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES            6
+NON ZERO ELEMENTS            14
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE maximize_profit Using LP From line 51
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   maximize_profit     OBJECTIVE  profit
+     TYPE    LP                  DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  51
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE            99000.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Optimal solution found
+Objective:        99000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU profit_def          .              .              .             1.0000      
+
+---- EQU land_constraint  
+
+              LOWER          LEVEL          UPPER         MARGINAL
+
+arable        -INF          100.0000       100.0000       660.0000      
+forest        -INF           50.0000        50.0000       660.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU emission_~          .              .              .             EPS         
+
+---- VAR land_use  
+
+                    LOWER          LEVEL          UPPER         MARGINAL
+
+arable.wheat          .              .            +INF          -10.0000      
+arable.maize          .           100.0000        +INF             .          
+forest.wheat          .              .            +INF          -10.0000      
+forest.maize          .            50.0000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR profit            -INF        99000.0000        +INF             .          
+---- VAR total_emi~        -INF          170.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     53 VARIABLE land_use.L  
+
+             maize
+
+arable     100.000
+forest      50.000
+
+
+----     53 VARIABLE profit.L              =    99000.000  
+            VARIABLE total_emission.L      =      170.000  
+
+
+EXECUTION TIME       =        0.047 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_02.gms
+Output     C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_02.lst
