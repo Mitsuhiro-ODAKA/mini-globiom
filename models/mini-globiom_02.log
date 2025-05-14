@@ -1,10 +1,11 @@
---- Job mini-globiom_02.gms Start 05/14/25 14:41:22 49.5.0 b32bf9f5 WEX-WEI x86 64bit/MS Windows
+
+--- Job mini-globiom_02.gms Start 05/14/25 15:03:59 49.5.0 b32bf9f5 WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\49\gmsprmNT.txt
 --- GAMS Parameters defined
-    Input C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_02.gms
+    Input C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\mini-globiom_02.gms
     PageSize 0
-    ScrDir C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\225a\
+    ScrDir C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\225a\
     SysDir C:\GAMS\49\
     LogOption 3
     ErrMsg 1
@@ -18,17 +19,17 @@ Licensee: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
 System information: 6 physical cores and 16 Gb memory detected
 GAMS 49.5.0   Copyright (C) 1987-2025 GAMS Development. All rights reserved
 --- Starting compilation
---- mini-globiom_02.gms(53) 3 Mb
---- Starting execution: elapsed 0:00:00.006
---- mini-globiom_02.gms(27) 4 Mb
+--- mini-globiom_02.gms(79) 3 Mb
+--- Starting execution: elapsed 0:00:00.002
+--- mini-globiom_02.gms(41) 4 Mb
 --- Generating LP model maximize_profit
---- mini-globiom_02.gms(51) 4 Mb
+--- mini-globiom_02.gms(74) 4 Mb
 ---   4 rows  6 columns  14 non-zeroes
 --- Range statistics (absolute non-zero finite values)
 --- RHS       [min, max] : [ 5.000E+01, 1.000E+02] - Zero values observed as well
 --- Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 --- Matrix    [min, max] : [ 5.000E-01, 6.600E+02]
---- Executing CPLEX (Solvelink=2): elapsed 0:00:00.011
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:00.002
 
 IBM ILOG CPLEX   49.5.0 b32bf9f5 Apr 29, 2025          WEI x86 64bit/MS Window
 
@@ -58,7 +59,7 @@ Optimal solution found
 Objective:        99000.000000
 
 --- Reading solution for model maximize_profit
---- Executing after solve: elapsed 0:00:00.054
---- mini-globiom_02.gms(53) 4 Mb
+--- Executing after solve: elapsed 0:00:00.047
+--- mini-globiom_02.gms(79) 4 Mb
 *** Status: Normal completion
---- Job mini-globiom_02.gms Stop 05/14/25 14:41:23 elapsed 0:00:00.054
+--- Job mini-globiom_02.gms Stop 05/14/25 15:03:59 elapsed 0:00:00.047

@@ -1,10 +1,10 @@
---- Job mini-globiom_01.gms Start 05/14/25 14:41:49 49.5.0 b32bf9f5 WEX-WEI x86 64bit/MS Windows
+--- Job mini-globiom_01.gms Start 05/14/25 15:04:09 49.5.0 b32bf9f5 WEX-WEI x86 64bit/MS Windows
 --- Applying:
     C:\GAMS\49\gmsprmNT.txt
 --- GAMS Parameters defined
-    Input C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_01.gms
+    Input C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\mini-globiom_01.gms
     PageSize 0
-    ScrDir C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\225a\
+    ScrDir C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\225a\
     SysDir C:\GAMS\49\
     LogOption 3
     ErrMsg 1
@@ -19,7 +19,7 @@ System information: 6 physical cores and 16 Gb memory detected
 GAMS 49.5.0   Copyright (C) 1987-2025 GAMS Development. All rights reserved
 --- Starting compilation
 --- mini-globiom_01.gms(111) 3 Mb
---- Starting execution: elapsed 0:00:00.005
+--- Starting execution: elapsed 0:00:00.004
 --- mini-globiom_01.gms(39) 4 Mb
 --- Generating LP model SimpleFarmModel
 --- mini-globiom_01.gms(85) 4 Mb
@@ -28,7 +28,7 @@ GAMS 49.5.0   Copyright (C) 1987-2025 GAMS Development. All rights reserved
 --- RHS       [min, max] : [ 1.000E+02, 1.000E+02] - Zero values observed as well
 --- Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 --- Matrix    [min, max] : [ 1.000E+00, 8.000E+02]
---- Executing CPLEX (Solvelink=2): elapsed 0:00:00.011
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:00.014
 
 IBM ILOG CPLEX   49.5.0 b32bf9f5 Apr 29, 2025          WEI x86 64bit/MS Window
 
@@ -58,7 +58,7 @@ Optimal solution found
 Objective:       120000.000000
 
 --- Reading solution for model SimpleFarmModel
---- Executing after solve: elapsed 0:00:00.048
+--- Executing after solve: elapsed 0:00:00.051
 --- mini-globiom_01.gms(108) 4 Mb
 *** Status: Normal completion
---- Job mini-globiom_01.gms Stop 05/14/25 14:41:49 elapsed 0:00:00.048
+--- Job mini-globiom_01.gms Stop 05/14/25 15:04:09 elapsed 0:00:00.051

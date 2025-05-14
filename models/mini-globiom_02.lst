@@ -1,4 +1,4 @@
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 1
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -85,7 +85,7 @@ C o m p i l a t i o n
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  49.5.0 b32bf9f5 WEX-WEI
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 2
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Equation Listing    SOLVE maximize_profit Using LP From line 74
 
@@ -106,7 +106,7 @@ land_constraint(forest)..  land_use(forest,wheat) + land_use(forest,maize) =L= 5
 
 emission_def..  - 0.5*land_use(arable,wheat) - 0.6*land_use(arable,maize) - 2*land_use(forest,wheat) - 2.2*land_use(forest,maize) + total_emission =E= 0 ; (LHS = 0)
      
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 3
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Column Listing      SOLVE maximize_profit Using LP From line 74
 
@@ -146,7 +146,7 @@ total_emission
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       emission_def
 
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 4
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Range Statistics    SOLVE maximize_profit Using LP From line 74
 
@@ -157,7 +157,7 @@ RHS       [min, max] : [ 5.000E+01, 1.000E+02] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 5.000E-01, 6.600E+02]
 
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 5
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Model Statistics    SOLVE maximize_profit Using LP From line 74
 
@@ -170,7 +170,7 @@ NON ZERO ELEMENTS            14
 
 
 GENERATION TIME      =        0.000 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 6
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Solution Report     SOLVE maximize_profit Using LP From line 74
 
@@ -236,7 +236,7 @@ forest.maize          .            50.0000        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 7
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:03:59 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
@@ -253,7 +253,7 @@ forest      50.000
             VARIABLE total_emission.L      =      170.000  
 
 
-EXECUTION TIME       =        0.047 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+EXECUTION TIME       =        0.046 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
 
 
 USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
