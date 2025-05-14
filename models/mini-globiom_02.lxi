@@ -1,22 +1,22 @@
 B 3 C o m p i l a t i o n
-B 64 Equation Listing    SOLVE maximize_profit Using LP From line 51
-D 67 profit_def
-D 72 land_constraint
-D 79 emission_def
-B 85 Column Listing      SOLVE maximize_profit Using LP From line 51
-E 88 land_use
-E 110 profit
-E 117 total_emission
-B 125 Range Statistics    SOLVE maximize_profit Using LP From line 51
-B 136 Model Statistics    SOLVE maximize_profit Using LP From line 51
-B 149 Solution Report     SOLVE maximize_profit Using LP From line 51
-F 182 profit_def
-F 184 land_constraint
-F 193 emission_def
-G 195 land_use
-G 206 profit
-G 207 total_emission
-B 215 E x e c u t i o n
-I 215 land_use
-I 225 profit
-I 226 total_emission
+B 90 Equation Listing    SOLVE maximize_profit Using LP From line 74
+D 93 profit_def
+D 98 land_constraint
+D 105 emission_def
+B 111 Column Listing      SOLVE maximize_profit Using LP From line 74
+E 114 land_use
+E 136 profit
+E 143 total_emission
+B 151 Range Statistics    SOLVE maximize_profit Using LP From line 74
+B 162 Model Statistics    SOLVE maximize_profit Using LP From line 74
+B 175 Solution Report     SOLVE maximize_profit Using LP From line 74
+F 208 profit_def
+F 210 land_constraint
+F 219 emission_def
+G 221 land_use
+G 232 profit
+G 233 total_emission
+B 241 E x e c u t i o n
+I 241 land_use
+I 251 profit
+I 252 total_emission

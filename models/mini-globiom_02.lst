@@ -1,67 +1,93 @@
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 1
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
-   1  SETS
-   2    l  Land types /arable, forest/
-   3    c  Crops      /wheat, maize/;
-   4   
-   5  PARAMETERS
-   6    land_avail(l)
-   7    price(c)
-   8    yield(c)
-   9    co2_emission(l,c)
-  10    cost(c);
-  11   
-  12  land_avail("arable") = 100;
-  13  land_avail("forest") = 50;
-  14   
-  15  price("wheat") = 300;
-  16  price("maize") = 250;
-  17   
-  18  yield("wheat") = 2.5;
-  19  yield("maize") = 3.0;
-  20   
-  21  cost("wheat") = 100;
-  22  cost("maize") = 90;
-  23   
-  24  co2_emission("arable","wheat") = 0.5;
-  25  co2_emission("arable","maize") = 0.6;
-  26  co2_emission("forest","wheat") = 2.0;
-  27  co2_emission("forest","maize") = 2.2;
+   1  *-------------------------------------------------------------------------------
+   2  * Title: Simple Agricultural Sector Model (GLOBIOM-like basic structure)
+   3  * Author: Mitsuhiro Odaka
+   4  * Date: 2025-05-14
+   5  * Description: A simple model to maximize profit from crop production
+   6  * under a land constraint.
+   7  *-------------------------------------------------------------------------------
+   8   
+   9  *-------------------------------------------------------------------------------
+  10  * 1. Set Declarations
+  11  *-------------------------------------------------------------------------------
+  12  Sets
+  13    l  Land types /arable, forest/
+  14    c  Crops      /wheat, maize/;
+  15   
+  16  *-------------------------------------------------------------------------------
+  17  * 2. Data Declarations and Definitions (Parameters)
+  18  *-------------------------------------------------------------------------------
+  19  Parameters
+  20    land_avail(l)
+  21    price(c)
+  22    yield(c)
+  23    co2_emission(l,c)
+  24    cost(c);
+  25   
+  26  land_avail("arable") = 100;
+  27  land_avail("forest") = 50;
   28   
-  29  VARIABLES
-  30    land_use(l,c)
-  31    profit
-  32    total_emission;
-  33   
-  34  POSITIVE VARIABLES land_use;
-  35   
-  36  EQUATIONS
-  37    profit_def
-  38    land_constraint(l)
-  39    emission_def;
-  40   
-  41  profit_def..
-  42    profit =E= SUM((l,c), (price(c)*yield(c) - cost(c)) * land_use(l,c));
-  43   
-  44  land_constraint(l)..
-  45    SUM(c, land_use(l,c)) =L= land_avail(l);
-  46   
-  47  emission_def..
-  48    total_emission =E= SUM((l,c), co2_emission(l,c)*land_use(l,c));
-  49   
-  50  MODEL maximize_profit /all/;
-  51  SOLVE maximize_profit USING LP MAXIMIZING profit;
+  29  price("wheat") = 300;
+  30  price("maize") = 250;
+  31   
+  32  yield("wheat") = 2.5;
+  33  yield("maize") = 3.0;
+  34   
+  35  cost("wheat") = 100;
+  36  cost("maize") = 90;
+  37   
+  38  co2_emission("arable","wheat") = 0.5;
+  39  co2_emission("arable","maize") = 0.6;
+  40  co2_emission("forest","wheat") = 2.0;
+  41  co2_emission("forest","maize") = 2.2;
+  42   
+  43  *-------------------------------------------------------------------------------
+  44  * 3. Variable Declarations
+  45  *-------------------------------------------------------------------------------
+  46  Variables
+  47    land_use(l,c)
+  48    profit
+  49    total_emission;
+  50   
+  51  Positive Variables land_use;
   52   
-  53  DISPLAY land_use.l, profit.l, total_emission.l;
+  53  *-------------------------------------------------------------------------------
+  54  * 4. Equation Declarations
+  55  *-------------------------------------------------------------------------------
+  56  Equations
+  57    profit_def
+  58    land_constraint(l)
+  59    emission_def;
+  60   
+  61  profit_def..
+  62    profit =E= SUM((l,c), (price(c)*yield(c) - cost(c)) * land_use(l,c));
+  63   
+  64  land_constraint(l)..
+  65    SUM(c, land_use(l,c)) =L= land_avail(l);
+  66   
+  67  emission_def..
+  68    total_emission =E= SUM((l,c), co2_emission(l,c)*land_use(l,c));
+  69   
+  70  *-------------------------------------------------------------------------------
+  71  * 6. Model Definition and Solve Statement
+  72  *-------------------------------------------------------------------------------
+  73  Model maximize_profit /all/;
+  74  Solve maximize_profit USING LP MAXIMIZING profit;
+  75   
+  76  *-------------------------------------------------------------------------------
+  77  * 7. Displaying Results
+  78  *-------------------------------------------------------------------------------
+  79  Display land_use.l, profit.l, total_emission.l;
 
 
 COMPILATION TIME     =        0.000 SECONDS      3 MB  49.5.0 b32bf9f5 WEX-WEI
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 2
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Equation Listing    SOLVE maximize_profit Using LP From line 51
+Equation Listing    SOLVE maximize_profit Using LP From line 74
 
 
 ---- profit_def  =E=  
@@ -80,9 +106,9 @@ land_constraint(forest)..  land_use(forest,wheat) + land_use(forest,maize) =L= 5
 
 emission_def..  - 0.5*land_use(arable,wheat) - 0.6*land_use(arable,maize) - 2*land_use(forest,wheat) - 2.2*land_use(forest,maize) + total_emission =E= 0 ; (LHS = 0)
      
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 3
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Column Listing      SOLVE maximize_profit Using LP From line 51
+Column Listing      SOLVE maximize_profit Using LP From line 74
 
 
 ---- land_use  
@@ -120,9 +146,9 @@ total_emission
                 (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
         1       emission_def
 
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 4
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Range Statistics    SOLVE maximize_profit Using LP From line 51
+Range Statistics    SOLVE maximize_profit Using LP From line 74
 
 
 RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
@@ -131,9 +157,9 @@ RHS       [min, max] : [ 5.000E+01, 1.000E+02] - Zero values observed as well
 Bound     [min, max] : [        NA,        NA] - Zero values observed as well
 Matrix    [min, max] : [ 5.000E-01, 6.600E+02]
 
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 5
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Model Statistics    SOLVE maximize_profit Using LP From line 51
+Model Statistics    SOLVE maximize_profit Using LP From line 74
 
 
 MODEL STATISTICS
@@ -143,17 +169,17 @@ BLOCKS OF VARIABLES           3     SINGLE VARIABLES            6
 NON ZERO ELEMENTS            14
 
 
-GENERATION TIME      =        0.016 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 6
+GENERATION TIME      =        0.000 SECONDS      4 MB  49.5.0 b32bf9f5 WEX-WEI
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-Solution Report     SOLVE maximize_profit Using LP From line 51
+Solution Report     SOLVE maximize_profit Using LP From line 74
 
 
                S O L V E      S U M M A R Y
 
      MODEL   maximize_profit     OBJECTIVE  profit
      TYPE    LP                  DIRECTION  MAXIMIZE
-     SOLVER  CPLEX               FROM LINE  51
+     SOLVER  CPLEX               FROM LINE  74
 
 **** SOLVER STATUS     1 Normal Completion
 **** MODEL STATUS      1 Optimal
@@ -210,12 +236,12 @@ forest.maize          .            50.0000        +INF             .
 **** REPORT SUMMARY :        0     NONOPT
                              0 INFEASIBLE
                              0  UNBOUNDED
-GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 14:41:22 Page 7
+GAMS 49.5.0  b32bf9f5 Apr 29, 2025          WEX-WEI x86 64bit/MS Windows - 05/14/25 15:02:44 Page 7
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 E x e c u t i o n
 
 
-----     53 VARIABLE land_use.L  
+----     79 VARIABLE land_use.L  
 
              maize
 
@@ -223,7 +249,7 @@ arable     100.000
 forest      50.000
 
 
-----     53 VARIABLE profit.L              =    99000.000  
+----     79 VARIABLE profit.L              =    99000.000  
             VARIABLE total_emission.L      =      170.000  
 
 
@@ -236,5 +262,5 @@ USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
 
 **** FILE SUMMARY
 
-Input      C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_02.gms
-Output     C:\Users\user\OneDrive\Documents\GAMS\Studio\workspace\mini-globiom_02.lst
+Input      C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\mini-globiom_02.gms
+Output     C:\Users\user\OneDrive\Documents\GitHub\mini-globiom\models\mini-globiom_02.lst

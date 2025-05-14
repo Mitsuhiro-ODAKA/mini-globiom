@@ -1,8 +1,22 @@
-SETS
+*-------------------------------------------------------------------------------
+* Title: Simple Agricultural Sector Model (GLOBIOM-like basic structure)
+* Author: Mitsuhiro Odaka
+* Date: 2025-05-14
+* Description: A simple model to maximize profit from crop production
+* under a land constraint.
+*-------------------------------------------------------------------------------
+
+*-------------------------------------------------------------------------------
+* 1. Set Declarations
+*-------------------------------------------------------------------------------
+Sets
   l  Land types /arable, forest/
   c  Crops      /wheat, maize/;
 
-PARAMETERS
+*-------------------------------------------------------------------------------
+* 2. Data Declarations and Definitions (Parameters)
+*-------------------------------------------------------------------------------
+Parameters
   land_avail(l)
   price(c)
   yield(c)
@@ -26,14 +40,20 @@ co2_emission("arable","maize") = 0.6;
 co2_emission("forest","wheat") = 2.0;
 co2_emission("forest","maize") = 2.2;
 
-VARIABLES
+*-------------------------------------------------------------------------------
+* 3. Variable Declarations
+*-------------------------------------------------------------------------------
+Variables
   land_use(l,c)
   profit
   total_emission;
 
-POSITIVE VARIABLES land_use;
+Positive Variables land_use;
 
-EQUATIONS
+*-------------------------------------------------------------------------------
+* 4. Equation Declarations
+*-------------------------------------------------------------------------------
+Equations
   profit_def
   land_constraint(l)
   emission_def;
@@ -47,7 +67,13 @@ land_constraint(l)..
 emission_def..
   total_emission =E= SUM((l,c), co2_emission(l,c)*land_use(l,c));
 
-MODEL maximize_profit /all/;
-SOLVE maximize_profit USING LP MAXIMIZING profit;
+*-------------------------------------------------------------------------------
+* 6. Model Definition and Solve Statement
+*-------------------------------------------------------------------------------
+Model maximize_profit /all/;
+Solve maximize_profit USING LP MAXIMIZING profit;
 
-DISPLAY land_use.l, profit.l, total_emission.l;
+*-------------------------------------------------------------------------------
+* 7. Displaying Results
+*-------------------------------------------------------------------------------
+Display land_use.l, profit.l, total_emission.l;
